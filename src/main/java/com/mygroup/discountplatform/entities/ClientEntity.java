@@ -11,6 +11,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,22 +36,24 @@ public class ClientEntity {
     private String rut;
 
     @Column(name = "first_name", nullable = false)
-    @NotBlank
+    @NotBlank(message = "name is required")
+    @Size(min = 2, max = 50, message = "Name must be between 2 and 50 characters")
     private String firstName;
 
     @Column(name = "last_name_paternal", nullable = false)
-    @NotBlank
+    @NotBlank(message = "last name paternal is required")
     private String lastNamePaternal;
 
     @Column(name = "last_name_maternal")
     private String lastNameMaternal;
 
     @Column(name = "email", nullable = false, unique = true)
-    @Email
+    @Email(message = "Invalid email format")
     @NotBlank
     private String email;
 
     @Column(name = "phone")
+    @Pattern(regexp = "^\\+?[0-9]{9,12}$", message = "Invalid phone format")
     private String phone;
 
     @Column(name = "department_number")
