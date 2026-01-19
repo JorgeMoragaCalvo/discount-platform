@@ -1,11 +1,6 @@
 package com.mygroup.discountplatform.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -14,13 +9,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
-@Table(name = "supplier")
+@Table(name = "supplier", indexes = {
+        @Index(name = "idx_supplier_category", columnList = "id_category")
+})
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class SupplierEntity {
+public class SupplierEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,4 +44,14 @@ public class SupplierEntity {
     @Pattern(regexp = "^\\+?[0-9]{9,12}$", message = "Invalid phone format")
     @NotBlank(message = "supplier phone is required")
     private String phone;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_category", nullable = false)
+    private Category category;
+
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<OfferEntity> offers = new HashSet<>();
+
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<BuildingSupplierEntity> buildingSuppliers = new HashSet<>();
 }

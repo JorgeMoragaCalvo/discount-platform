@@ -25,7 +25,7 @@ public class ProfessionEntity {
     @Column(name = "id_profession")
     private Long id;
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     @NotBlank(message = "profession name is required")
     private String name;
 }

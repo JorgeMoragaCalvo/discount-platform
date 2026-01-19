@@ -1,6 +1,20 @@
 package com.mygroup.discountplatform.entities;
 
-import jakarta.persistence.*;
+import com.mygroup.discountplatform.entities.enums.Genre;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -9,6 +23,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -20,7 +37,7 @@ import lombok.Setter;
         @Index(name = "idx_client_rut", columnList = "rut"),
         @Index(name = "idx_client_building", columnList = "id_building")
 })
-public class ClientEntity {
+public class ClientEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,7 +72,29 @@ public class ClientEntity {
     @Column(name = "department_number")
     private String departmentNumber;
 
+    @Column(name = "genre")
+    private Genre genre;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_building", nullable = false)
     private BuildingEntity building;
+
+    @ManyToMany
+    @JoinTable(
+            name = "client_hobby",
+            joinColumns = @JoinColumn(name = "id_client"),
+            inverseJoinColumns = @JoinColumn(name = "id_hobby")
+    )
+    private Set<HobbyEntity> hobbies = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "client_profession",
+            joinColumns = @JoinColumn(name = "id_client"),
+            inverseJoinColumns = @JoinColumn(name = "id_profession")
+    )
+    private Set<ProfessionEntity> professions = new HashSet<>();
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<RedemptionEntity> redemptions = new HashSet<>();
 }

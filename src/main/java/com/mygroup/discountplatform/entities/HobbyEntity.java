@@ -25,7 +25,7 @@ public class HobbyEntity {
     @Column(name = "id_hobby")
     private Long id;
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name", nullable = false, unique = true)
     @NotBlank(message = "hobby name is required")
     private String name;
 }
