@@ -1,7 +1,10 @@
 package com.mygroup.discountplatform.entities.enums;
 
+import lombok.Getter;
+
 import java.util.Arrays;
 
+@Getter
 public enum Genre {
 
     MALE(1),
@@ -12,10 +15,6 @@ public enum Genre {
 
     Genre(int code) {
         this.code = code;
-    }
-
-    public int getCode() {
-        return code;
     }
 
     public static Genre fromCode(Integer code) {
