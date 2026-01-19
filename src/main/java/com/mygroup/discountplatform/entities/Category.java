@@ -13,19 +13,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "hobby")
+@Table(name = "category")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class HobbyEntity {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_hobby")
+    @Column(name = "id_category")
     private Long id;
 
-    @Column(name = "name", unique = true)
-    @NotBlank(message = "hobby name is required")
+    @Column(name = "name", nullable = false)
+    @NotBlank(message = "category name is required")
     private String name;
 }
