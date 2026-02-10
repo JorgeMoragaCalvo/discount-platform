@@ -1,6 +1,7 @@
 package com.mygroup.discountplatform.entities;
 
 import com.mygroup.discountplatform.entities.enums.Genre;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,15 +38,18 @@ import java.util.Set;
         @Index(name = "idx_client_rut", columnList = "rut"),
         @Index(name = "idx_client_building", columnList = "id_building")
 })
+@Schema(description = "Client entity representing a person")
 public class ClientEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_client")
+    @Schema(description = "Unique identifier of the client", example = "1", accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
     @Column(name = "rut", nullable = false, unique = true)
-    @NotBlank
+    @NotBlank(message = "rut is required")
+    @Schema(description = "rut of the client", example = "12345678-9", requiredMode = Schema.RequiredMode.REQUIRED)
     private String rut;
 
     @Column(name = "first_name", nullable = false)
@@ -67,6 +71,7 @@ public class ClientEntity extends BaseEntity {
 
     @Column(name = "phone")
     @Pattern(regexp = "^\\+?[0-9]{9,12}$", message = "Invalid phone format")
+    @Schema(description = "client phone", example = "+56912345678", requiredMode = Schema.RequiredMode.REQUIRED)
     private String phone;
 
     @Column(name = "department_number")

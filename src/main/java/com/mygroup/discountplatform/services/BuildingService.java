@@ -9,6 +9,8 @@ import com.mygroup.discountplatform.mappers.BuildingMapper;
 import com.mygroup.discountplatform.repositories.BuildingRepository;
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityNotFoundException;
+
 import java.util.List;
 
 @Service
@@ -35,6 +37,9 @@ public class BuildingService {
 
     public List<BuildingByCityDTO> findByCity(String city) {
         List<BuildingEntity> buildings = buildingRepository.findByCity(city);
+        if (buildings.isEmpty()) {
+            throw new EntityNotFoundException("No buildings found in city: " + city);
+        }
         return buildingMapper.toByCityDTOList(buildings);
     }
 }
